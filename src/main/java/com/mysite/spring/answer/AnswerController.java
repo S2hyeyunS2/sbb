@@ -6,15 +6,16 @@ import com.mysite.spring.user.SiteUser;
 import com.mysite.spring.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
@@ -88,5 +89,22 @@ public class AnswerController {
         this.answerService.vote(answer, siteUser);
         return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/detail/{id}")
+    public String questionDetail(Model model, @PathVariable("id") Integer id,
+                                 @RequestParam(value = "page", defaultValue = "0") int page,
+                                 @RequestParam(value = "sort", defaultValue = "createDate") String sort) {
+        Question question = questionService.getQuestion(id);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sort).descending());
+        Page<Answer> answerPage = answerService.getAnswerList(question, pageable);
+
+        model.addAttribute("question", question);
+        model.addAttribute("answers", answerPage.getContent()); // 현재 페이지의 답변 리스트
+        model.addAttribute("page", answerPage); // 페이징 객체
+        model.addAttribute("sort", sort); // 정렬 기준
+        return "question_detail";
+    }
+
 
 }
