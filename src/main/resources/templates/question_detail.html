@@ -75,6 +75,14 @@
         </div>
     </div>
     <!-- 답변 반복 끝  -->
+    <!-- 답변 댓글 작성 시작 -->
+    <form th:action="@{|/comment/createQuestion/${question.id}|}" th:object="${commentForm}" method="post" class="my-1 mx-2">
+        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+        <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="1"></textarea>
+        <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="1"></textarea>
+        <input type="submit" value="댓글등록" class="btn btn-primary my-2">
+    </form>
+    <!-- 답변 댓글 작성 끝 -->
     <!-- 답변 페이징처리 시작 -->
     <div th:if="${answerPaging != null and !answerPaging.isEmpty()}">
         <ul class="pagination justify-content-center">
@@ -109,6 +117,7 @@
         <input type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
 </div>
+
 <script layout:fragment="script" type='text/javascript'>
     const delete_elements = document.getElementsByClassName("delete");
     Array.from(delete_elements).forEach(function(element) {

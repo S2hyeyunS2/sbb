@@ -21,6 +21,12 @@ import java.security.Principal;
 @RequestMapping("/comment")
 @Controller
 public class CommentController {
+
+    private final QuestionService questionService;
+    private final UserService userService;
+    private final CommentService commentService;
+    private final AnswerService answerService;
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/createQuestion/{id}")
     public String createQuestionComment(@PathVariable("id") Integer id,
@@ -153,9 +159,4 @@ public class CommentController {
         this.commentService = commentService;
         this.answerService = answerService;
     }
-
-    private final QuestionService questionService;
-    private final UserService userService;
-    private final CommentService commentService;
-    private final AnswerService answerService;
 }
