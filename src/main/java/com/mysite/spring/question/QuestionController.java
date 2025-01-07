@@ -3,6 +3,7 @@ package com.mysite.spring.question;
 import com.mysite.spring.answer.Answer;
 import com.mysite.spring.answer.AnswerForm;
 import com.mysite.spring.answer.AnswerService;
+import com.mysite.spring.comment.CommentForm;
 import com.mysite.spring.user.SiteUser;
 import com.mysite.spring.user.UserService;
 import jakarta.validation.Valid;
@@ -102,7 +103,7 @@ public class QuestionController {
     }
 
     @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm,
+    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm, CommentForm commentForm,
                          @RequestParam(value = "answerPage", defaultValue = "0") int answerPage) {
         Question question = this.questionService.getQuestion(id);
         Page<Answer> answerPaging =  this.answerService.getList(question, answerPage);
