@@ -4,13 +4,10 @@ import com.mysite.spring.DataNotFoundException;
 import com.mysite.spring.question.Question;
 import com.mysite.spring.user.SiteUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -29,8 +26,12 @@ public class AnswerService {
     }
 
     public Answer getAnswer(Integer id) {
-        return this.answerRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("answer not found"));
+        Optional<Answer> answer = this.answerRepository.findById(id);
+        if (answer.isPresent()) {
+            return answer.get();
+        } else {
+            throw new DataNotFoundException("answer not found");
+        }
     }
 
     public void modify(Answer answer, String content) {
@@ -46,10 +47,5 @@ public class AnswerService {
     public void vote(Answer answer, SiteUser siteUser) {
         answer.getVoter().add(siteUser);
         this.answerRepository.save(answer);
-    }
-
-    public Page<Answer> getAnswerListByQuestion(Question question, int page, String sort) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sort).descending());
-        return this.answerRepository.findByQuestion(question, pageable);
     }
 }
