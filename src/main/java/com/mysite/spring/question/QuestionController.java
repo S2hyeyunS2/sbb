@@ -36,14 +36,6 @@ public class QuestionController {
         return "question_list";
     }
 
-    @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
-        //QuestionService의 getQuestion 메서드를 호출해 Question 객체를 템플릿에 전달
-        Question question = this.questionService.getQuestion(id);
-        model.addAttribute("question", question);
-        return "question_detail";
-    }
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String questionCreate(QuestionForm questionForm) {
@@ -118,5 +110,4 @@ public class QuestionController {
         model.addAttribute("answerPaging", answerPaging);
         return "question_detail";
     }
-
 }
