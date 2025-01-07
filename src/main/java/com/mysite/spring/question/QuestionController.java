@@ -108,6 +108,7 @@ public class QuestionController {
         Page<Answer> answerPaging =  this.answerService.getList(question, answerPage);
         model.addAttribute("question", question);
         model.addAttribute("answerPaging", answerPaging);
+        model.addAttribute("answerForm", new AnswerForm());
         return "question_detail";
     }
 }
