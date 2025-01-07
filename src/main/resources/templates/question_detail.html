@@ -101,7 +101,6 @@
     <form th:action="@{|/question/detail/${question.id}|}" method="get" id="answerPageForm">
         <input type="hidden" id="answerPage" name="answerPage" th:value="${answerPaging.number}">
     </form>
-</div>
     <!-- 답변 작성 -->
     <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
