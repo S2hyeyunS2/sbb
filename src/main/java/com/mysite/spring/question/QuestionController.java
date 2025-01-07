@@ -1,6 +1,8 @@
 package com.mysite.spring.question;
 
+import com.mysite.spring.answer.Answer;
 import com.mysite.spring.answer.AnswerForm;
+import com.mysite.spring.answer.AnswerService;
 import com.mysite.spring.user.SiteUser;
 import com.mysite.spring.user.UserService;
 import jakarta.validation.Valid;
@@ -23,6 +25,7 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final UserService userService;
+    private final AnswerService answerService;
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
@@ -104,6 +107,16 @@ public class QuestionController {
         SiteUser siteUser = this.userService.getUser(principal.getName());
         this.questionService.vote(question, siteUser);
         return String.format("redirect:/question/detail/%s", id);
+    }
+
+    @GetMapping(value = "/detail/{id}")
+    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm,
+                         @RequestParam(value = "answerPage", defaultValue = "0") int answerPage) {
+        Question question = this.questionService.getQuestion(id);
+        Page<Answer> answerPaging =  this.answerService.getList(question, answerPage);
+        model.addAttribute("question", question);
+        model.addAttribute("answerPaging", answerPaging);
+        return "question_detail";
     }
 
 }
