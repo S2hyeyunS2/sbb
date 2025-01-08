@@ -1,7 +1,6 @@
 package com.mysite.spring.question;
 
 import com.mysite.spring.answer.Answer;
-import com.mysite.spring.category.Category;
 import com.mysite.spring.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,6 +38,5 @@ public class Question {
     @ManyToMany
     Set<SiteUser> voter;
 
-    @ManyToOne
-    private Category category;
+
 }
