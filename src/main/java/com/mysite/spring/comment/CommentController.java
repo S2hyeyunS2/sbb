@@ -3,7 +3,6 @@ package com.mysite.spring.comment;
 import com.mysite.spring.answer.Answer;
 import com.mysite.spring.answer.AnswerForm;
 import com.mysite.spring.answer.AnswerService;
-import com.mysite.spring.question.Question;
 import com.mysite.spring.question.QuestionService;
 import com.mysite.spring.user.SiteUser;
 import com.mysite.spring.user.UserService;
@@ -11,9 +10,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.ui.Model;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
@@ -27,23 +26,6 @@ public class CommentController {
     private final CommentService commentService;
     private final AnswerService answerService;
 
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/createQuestion/{id}")
-    public String createQuestionComment(@PathVariable("id") Integer id,
-                                        @ModelAttribute("commentForm") @Valid CommentForm commentForm,
-                                        BindingResult bindingResult,
-                                        Principal principal, Model model) {
-        if (bindingResult.hasErrors()) {
-            Question question = questionService.getQuestion(id);
-            model.addAttribute("question", question);
-            model.addAttribute("commentForm", commentForm);
-            model.addAttribute("org.springframework.validation.BindingResult.commentForm", bindingResult);
-            return "question_detail";
-        }
-        SiteUser siteuser = userService.getUser(principal.getName());
-        Comment comment = commentService.createQuestionComment(questionService.getQuestion(id), commentForm.getContent(), siteuser);
-        return String.format("redirect:/question/detail/%s#comment_%s", comment.getQuestion().getId(), comment.getId());
-    }
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/createAnswer/{id}")
     public String createAnswerComment(@PathVariable("id") Integer id,
@@ -59,8 +41,9 @@ public class CommentController {
         }
         SiteUser siteuser = userService.getUser(principal.getName());
         Comment comment = commentService.createAnswerComment(answerService.getAnswer(id), commentForm.getContent(), siteuser);
-        return String.format("redirect:/question/detail/%s#comment_%s",comment.getAnswer().getQuestion().getId(),comment.getAnswer());
+        return String.format("redirect:/question/detail/%s#comment_%s",comment.getAnswer().getQuestion().getId(),comment.getId());
     }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modifyQC/{id}")
     public String modifyQuestionComment(AnswerForm answerForm,

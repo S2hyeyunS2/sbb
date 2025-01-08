@@ -76,7 +76,7 @@
     </div>
     <!-- 답변 반복 끝  -->
     <!-- 답변 댓글 작성 시작 -->
-    <form th:action="@{|/comment/createQuestion/${question.id}|}" th:object="${commentForm}" method="post" class="my-1 mx-2">
+    <form th:action="@{|/comment/createAnswer/${answer.id}|}" th:object="${commentForm}" method="post" class="my-1 mx-2">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
         <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="1"></textarea>
         <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="1"></textarea>
