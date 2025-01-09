@@ -14,7 +14,14 @@
             <label for="password" class="form-label">비밀번호</label>
             <input type="password" name="password" id="password" class="form-control">
         </div>
-        <button type="submit" class="btn btn-primary">로그인</button>
+
+        <div class="d-flex justify-content-between">
+            <!-- 로그인 버튼 -->
+            <button type="submit" class="btn btn-primary">로그인</button>
+
+            <!-- 비밀번호 찾기 버튼 -->
+            <button type="button" class="btn btn-secondary" th:onclick="|window.location.href='@{/user/tempPassword}'|">비밀번호 찾기</button>
+        </div>
     </form>
 </div>
 </html>
