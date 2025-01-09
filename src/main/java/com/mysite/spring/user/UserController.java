@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,6 +56,12 @@ public class UserController {
     @GetMapping("/login")
     public String login() {
         return "login_form";
+    }
+
+    @GetMapping("/tempPassword")
+    public String showTempPasswordForm(Model model) {
+        model.addAttribute("tempPasswordForm", new TempPasswordForm());
+        return "tempPassword_form";  // 템플릿 파일 temp_password_form.html을 반환
     }
 
     @PostMapping("/tempPassword")
