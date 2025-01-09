@@ -3,11 +3,14 @@ package com.mysite.spring.question;
 import com.mysite.spring.answer.Answer;
 import com.mysite.spring.answer.AnswerForm;
 import com.mysite.spring.answer.AnswerService;
+import com.mysite.spring.category.CategoryService;
 import com.mysite.spring.comment.CommentForm;
 import com.mysite.spring.user.SiteUser;
 import com.mysite.spring.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,11 +30,24 @@ public class QuestionController {
     private final QuestionService questionService;
     private final UserService userService;
     private final AnswerService answerService;
+    private final CategoryService categoryService;
+    private static final Logger log = LoggerFactory.getLogger(QuestionController.class);
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
-                       @RequestParam(value = "kw", defaultValue = "") String kw) {
-        Page<Question> paging = this.questionService.getList(page, kw);
+                       @RequestParam(value = "kw", defaultValue = "") String kw,
+                       @RequestParam(value="categoryName",defaultValue="") String categoryName) {
+        Page<Question> paging = this.questionService.getList(page, kw, categoryName);
+        model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
+        return "question_list";
+    }
+
+    @GetMapping("/freepost/list")
+    public String freepostList(Model model, @RequestParam(value="page", defaultValue="0") int page,
+                               @RequestParam(value = "kw", defaultValue = "") String kw) {
+        log.info("page:{}, kw:{}", page, kw);
+        Page<Question> paging = this.questionService.getList(page, kw, "자유");
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
         return "question_list";
@@ -39,7 +55,8 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
-    public String questionCreate(QuestionForm questionForm) {
+    public String questionCreate(Model model, QuestionForm questionForm) {
+        model.addAttribute("categoryList", categoryService.getList());
         return "question_form";
     }
 
