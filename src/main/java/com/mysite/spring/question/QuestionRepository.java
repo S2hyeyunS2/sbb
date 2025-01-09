@@ -16,6 +16,9 @@ public interface QuestionRepository extends JpaRepository<Question,Integer> {
     Page<Question> findAll(Pageable pageable);
     Page<Question> findAll(Specification<Question> spec, Pageable pageable);
 
+    // 카테고리 이름으로 질문을 필터링하는 메서드 추가
+    Page<Question> findByCategoryName(String categoryName, String keyword, Pageable pageable);
+
     @Query("select "
             + "distinct q "
             + "from Question q "

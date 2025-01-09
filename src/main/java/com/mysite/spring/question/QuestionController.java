@@ -3,6 +3,7 @@ package com.mysite.spring.question;
 import com.mysite.spring.answer.Answer;
 import com.mysite.spring.answer.AnswerForm;
 import com.mysite.spring.answer.AnswerService;
+import com.mysite.spring.category.Category;
 import com.mysite.spring.category.CategoryService;
 import com.mysite.spring.comment.CommentForm;
 import com.mysite.spring.user.SiteUser;
@@ -62,13 +63,15 @@ public class QuestionController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String questionCreate(@Valid QuestionForm questionForm,
+    public String questionCreate(Model model, @Valid QuestionForm questionForm,
                                  BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categoryList", categoryService.getList());
             return "question_form";
         }
         SiteUser siteUser = this.userService.getUser(principal.getName());
-        this.questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser);
+        Category category = this.categoryService.getCategory(questionForm.getCategory());
+        this.questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser, category);
         return "redirect:/question/list";
     }
 

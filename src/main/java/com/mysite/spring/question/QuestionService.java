@@ -45,12 +45,13 @@ public class QuestionService {
         return this.questionRepository.findAll(spec, pageable);
     }
 
-    public void create(String subject, String content, SiteUser user) {
+    public void create(String subject, String content, SiteUser user, Category category) {
         Question q = new Question();
         q.setSubject(subject);
         q.setContent(content);
         q.setCreateDate(LocalDateTime.now());
         q.setAuthor(user);
+        q.setCategory(category);
         this.questionRepository.save(q);
     }
 

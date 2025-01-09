@@ -1,7 +1,9 @@
 package com.mysite.spring.category;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -16,8 +18,10 @@ public class CategoryService {
     }
 
     // 특정 카테고리 조회 (필요하면 추가)
-    public Category getCategory(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 없습니다. ID: " + id));
+    public Category getCategory(String name) {
+        return categoryRepository.findByName(name)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."));
     }
+
+
 }
