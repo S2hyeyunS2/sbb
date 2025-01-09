@@ -1,5 +1,8 @@
 package com.mysite.spring.user;
 
+import com.mysite.spring.DataNotFoundException;
+import com.mysite.spring.user.dto.TempPasswordForm;
+import com.mysite.spring.user.exception.EmailException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private static final String TEMP_PASSWORD_FORM="temp_password_form";
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -51,5 +55,26 @@ public class UserController {
     @GetMapping("/login")
     public String login() {
         return "login_form";
+    }
+
+    @PostMapping("/tempPassword")
+    public String sendTempPassword(@Valid TempPasswordForm tempPasswordForm,
+                                   BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return TEMP_PASSWORD_FORM;
+        }
+
+        try {
+            userService.modifyPassword(tempPasswordForm.getEmail());
+        } catch (DataNotFoundException e) {
+            e.printStackTrace();
+            bindingResult.reject("emailNotFound", e.getMessage());
+            return TEMP_PASSWORD_FORM;
+        } catch (EmailException e) {
+            e.printStackTrace();
+            bindingResult.reject("sendEmailFail", e.getMessage());
+            return TEMP_PASSWORD_FORM;
+        }
+        return "redirect:/";
     }
 }
