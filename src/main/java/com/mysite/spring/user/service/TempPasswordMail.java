@@ -35,7 +35,7 @@ public class TempPasswordMail {
         msgg += ePw + "</strong><div><br/> ";
         msgg += "</div>";
         message.setText(msgg, "utf-8", "html");
-        message.setFrom(new InternetAddress("hyeyuns2@naver.com", "sbb_Admin"));
+        message.setFrom(new InternetAddress("hhyeyun22@gmail.com", "sbb_Admin"));
 
         return message;
     }
