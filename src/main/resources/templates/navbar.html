@@ -16,8 +16,9 @@
                     <a class="nav-link" th:href="@{/user/signup}">회원가입</a>
                 </li>
                 <!-- 로그인 상태일 때 로그아웃만 표시 -->
-                <li class="nav-item" sec:authorize="isAuthenticated()">
+                <li class="nav-item" sec:authorize="isAuthenticated()" style="display: flex;">
                     <a class="nav-link" th:href="@{/user/logout}">로그아웃</a>
+                    <a class="nav-link" th:href="@{/user/profile}">내 정보</a>
                 </li>
                 <li>
                     <a class="nav-link" th:href="@{/question/list}">전체 게시판</a>
