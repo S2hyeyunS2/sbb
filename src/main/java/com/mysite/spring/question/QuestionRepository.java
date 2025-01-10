@@ -1,5 +1,6 @@
 package com.mysite.spring.question;
 
+import com.mysite.spring.user.SiteUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -15,6 +16,8 @@ public interface QuestionRepository extends JpaRepository<Question,Integer> {
     List<Question> findBySubjectLike(String subject);
     Page<Question> findAll(Pageable pageable);
     Page<Question> findAll(Specification<Question> spec, Pageable pageable);
+    Page<Question> findByAuthor(SiteUser siteUser, Pageable pageable);
+
 
     // 카테고리 이름으로 질문을 필터링하는 메서드 추가
     Page<Question> findByCategoryName(String categoryName, String keyword, Pageable pageable);
