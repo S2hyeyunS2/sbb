@@ -35,25 +35,32 @@ public class TempPasswordMail {
         msgg += ePw + "</strong><div><br/> ";
         msgg += "</div>";
         message.setText(msgg, "utf-8", "html");
-        message.setFrom(new InternetAddress("jea5158@gmail.com", "sbb_Admin"));
+        message.setFrom(new InternetAddress("hyeyuns2@naver.com", "sbb_Admin"));
 
         return message;
     }
 
     public void sendSimpleMessage(String to, String pw) {
         this.ePw = pw;
+
+        // 수신자 이메일 주소 로그 출력
+        System.out.println("수신자 이메일 주소: " + to);
+
         MimeMessage message;
         try {
             message = createMessage(to);
+            System.out.println("이메일 전송 준비 완료.");
         } catch (UnsupportedEncodingException | MessagingException e) {
             e.printStackTrace();
             throw new EmailException("이메일 생성 에러");
         }
         try {
             javaMailSender.send(message);
+            System.out.println("이메일 전송 성공.");
         } catch (MailException e) {
             e.printStackTrace();
             throw new EmailException("이메일 전송 에러");
         }
     }
+
 }

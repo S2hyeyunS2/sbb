@@ -61,7 +61,7 @@ public class UserController {
     @GetMapping("/tempPassword")
     public String showTempPasswordForm(Model model) {
         model.addAttribute("tempPasswordForm", new TempPasswordForm());
-        return "tempPassword_form";  // 템플릿 파일 temp_password_form.html을 반환
+        return "temp_password_form";  // 템플릿 파일 temp_password_form.html을 반환
     }
 
     @PostMapping("/tempPassword")
