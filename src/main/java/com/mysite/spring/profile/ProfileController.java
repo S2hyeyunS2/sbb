@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,9 @@ public class ProfileController {
     public String profile(Model model, @RequestParam(value = "questionPage", defaultValue = "0") int questionPage,
                           @RequestParam(value = "answerPage", defaultValue = "0") int answerPage,
                           @RequestParam(value = "commentPage", defaultValue = "0") int commentPage,
-                          @AuthenticationPrincipal SiteUser siteUser) {
+                          @AuthenticationPrincipal UserDetails detail) {
+
+        SiteUser siteUser=userService.getUser(detail.getUsername());
 
         // 로그인한 사용자의 정보를 가져옴
         model.addAttribute("siteUser", siteUser);
