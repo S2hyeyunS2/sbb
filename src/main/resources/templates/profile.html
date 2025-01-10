@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>내 정보</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container mt-5">
+    <!-- 사용자 정보 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>내 정보</h2>
+        </div>
+        <div class="card-body">
+            <p><strong>사용자 ID:</strong> <span th:text="${siteUser.username}">Guest</span></p>
+            <p><strong>이메일:</strong> <span th:text="${siteUser.email}">example@example.com</span></p>
+        </div>
+    </div>
+
+    <!-- 내가 작성한 질문 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>내 질문</h3>
+        </div>
+        <div class="card-body">
+            <div th:if="${questionPaging != null}">
+                <div th:each="question : ${questionPaging.content}" class="mb-3">
+                    <h5 th:text="${question.subject}">질문 제목</h5>
+                    <p th:text="${#dates.format(question.createDate, 'yyyy-MM-dd HH:mm')}">작성일</p>
+                    <a th:href="@{'/question/detail/' + ${question.id}}" class="btn btn-primary btn-sm">자세히 보기</a>
+                </div>
+            </div>
+            <!-- 페이징 -->
+            <nav th:if="${questionPaging != null && questionPaging.totalPages > 1}">
+                <ul class="pagination">
+                    <li th:classappend="${questionPaging.hasPrevious() ? '' : 'disabled'}">
+                        <a th:href="@{'/user/profile?questionPage=' + ${questionPaging.number - 1} + '&answerPage=' + ${answerPage} + '&commentPage=' + ${commentPage}}" class="page-link">이전</a>
+                    </li>
+                    <li th:each="pageNum : ${#numbers.sequence(0, questionPaging.totalPages - 1)}"
+                        th:classappend="${pageNum == questionPaging.number ? 'active' : ''}">
+                        <a th:href="@{'/user/profile?questionPage=' + ${pageNum} + '&answerPage=' + ${answerPage} + '&commentPage=' + ${commentPage}}" class="page-link" th:text="${pageNum + 1}"></a>
+                    </li>
+                    <li th:classappend="${questionPaging.hasNext() ? '' : 'disabled'}">
+                        <a th:href="@{'/user/profile?questionPage=' + ${questionPaging.number + 1} + '&answerPage=' + ${answerPage} + '&commentPage=' + ${commentPage}}" class="page-link">다음</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 내가 작성한 답변 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>내 답변</h3>
+        </div>
+        <div class="card-body">
+            <div th:if="${answerPaging != null}">
+                <div th:each="answer : ${answerPaging.content}" class="mb-3">
+                    <p th:text="${answer.content}">답변 내용</p>
+                    <p th:text="${#dates.format(answer.createDate, 'yyyy-MM-dd HH:mm')}">작성일</p>
+                    <a th:href="@{'/question/detail/' + ${answer.question.id}}" class="btn btn-primary btn-sm">질문 보기</a>
+                </div>
+            </div>
+            <!-- 페이징 -->
+            <nav th:if="${answerPaging != null && answerPaging.totalPages > 1}">
+                <ul class="pagination">
+                    <li th:classappend="${answerPaging.hasPrevious() ? '' : 'disabled'}">
+                        <a th:href="@{'/user/profile?questionPage=' + ${questionPage} + '&answerPage=' + ${answerPaging.number - 1} + '&commentPage=' + ${commentPage}}" class="page-link">이전</a>
+                    </li>
+                    <li th:each="pageNum : ${#numbers.sequence(0, answerPaging.totalPages - 1)}"
+                        th:classappend="${pageNum == answerPaging.number ? 'active' : ''}">
+                        <a th:href="@{'/user/profile?questionPage=' + ${questionPage} + '&answerPage=' + ${pageNum} + '&commentPage=' + ${commentPage}}" class="page-link" th:text="${pageNum + 1}"></a>
+                    </li>
+                    <li th:classappend="${answerPaging.hasNext() ? '' : 'disabled'}">
+                        <a th:href="@{'/user/profile?questionPage=' + ${questionPage} + '&answerPage=' + ${answerPaging.number + 1} + '&commentPage=' + ${commentPage}}" class="page-link">다음</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 내가 작성한 댓글 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>내 댓글</h3>
+        </div>
+        <div class="card-body">
+            <div th:if="${commentPaging != null}">
+                <div th:each="comment : ${commentPaging.content}" class="mb-3">
+                    <p th:text="${comment.content}">댓글 내용</p>
+                    <p th:text="${#dates.format(comment.createDate, 'yyyy-MM-dd HH:mm')}">작성일</p>
+                </div>
+            </div>
+            <!-- 페이징 -->
+            <nav th:if="${commentPaging != null && commentPaging.totalPages > 1}">
+                <ul class="pagination">
+                    <li th:classappend="${commentPaging.hasPrevious() ? '' : 'disabled'}">
+                        <a th:href="@{'/user/profile?questionPage=' + ${questionPage} + '&answerPage=' + ${answerPage} + '&commentPage=' + ${commentPaging.number - 1}}" class="page-link">이전</a>
+                    </li>
+                    <li th:each="pageNum : ${#numbers.sequence(0, commentPaging.totalPages - 1)}"
+                        th:classappend="${pageNum == commentPaging.number ? 'active' : ''}">
+                        <a th:href="@{'/user/profile?questionPage=' + ${questionPage} + '&answerPage=' + ${answerPage} + '&commentPage=' + ${pageNum}}" class="page-link" th:text="${pageNum + 1}"></a>
+                    </li>
+                    <li th:classappend="${commentPaging.hasNext() ? '' : 'disabled'}">
+                        <a th:href="@{'/user/profile?questionPage=' + ${questionPage} + '&answerPage=' + ${answerPage} + '&commentPage=' + ${commentPaging.number + 1}}" class="page-link">다음</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+</body>
+</html>

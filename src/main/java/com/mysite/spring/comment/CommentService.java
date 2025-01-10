@@ -5,9 +5,14 @@ import com.mysite.spring.answer.Answer;
 import com.mysite.spring.question.Question;
 import com.mysite.spring.user.SiteUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,5 +84,12 @@ public class CommentService {
     // 유저 아이디를 찾는 기능
     public List<Comment> findByUserId(Long userId) {
         return commentRepository.findByAuthorId(userId);
+    }
+
+    public Page<Comment> getUserComments(SiteUser siteUser, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts)); // 페이지 크기 5로 설정
+        return this.commentRepository.findByAuthor(siteUser, pageable);
     }
 }

@@ -1,6 +1,8 @@
 package com.mysite.spring.user;
 
 import com.mysite.spring.DataNotFoundException;
+import com.mysite.spring.answer.AnswerService;
+import com.mysite.spring.question.QuestionService;
 import com.mysite.spring.user.dto.TempPasswordForm;
 import com.mysite.spring.user.exception.EmailException;
 import jakarta.validation.Valid;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private final QuestionService questionService;
+    private final AnswerService answerService;
     private static final String TEMP_PASSWORD_FORM="temp_password_form";
 
     @GetMapping("/signup")

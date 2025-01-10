@@ -96,4 +96,11 @@ public class AnswerService {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return this.answerRepository.findAllByQuestion(question, pageable);
     }
+
+    public Page<Answer> getUserAnswers(SiteUser siteUser, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts)); // 페이지 크기 5로 설정
+        return this.answerRepository.findByAuthor(siteUser, pageable);
+    }
 }
