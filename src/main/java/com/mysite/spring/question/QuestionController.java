@@ -138,6 +138,7 @@ public class QuestionController {
                          @RequestParam(value = "answerPage", defaultValue = "0") int answerPage) {
         Question question = this.questionService.getQuestion(id);
         Page<Answer> answerPaging =  this.answerService.getList(question, answerPage);
+        this.questionService.viewUp(id);
         model.addAttribute("question", question);
         model.addAttribute("answerPaging", answerPaging);
         model.addAttribute("answerForm", new AnswerForm());

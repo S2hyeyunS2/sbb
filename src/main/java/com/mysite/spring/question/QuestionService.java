@@ -147,4 +147,15 @@ public class QuestionService {
         Pageable pageable = PageRequest.of(page, 5, Sort.by(sorts)); // 페이지 크기 5로 설정
         return this.questionRepository.findByAuthor(siteUser, pageable);
     }
+
+    public void viewUp(Integer id) {
+        Optional<Question> q = this.questionRepository.findById(id);
+        if (q.isPresent()) {
+            Question question = q.get();
+            question.setView(question.getView() + 1);
+            this.questionRepository.save(question);
+        } else {
+            throw new DataNotFoundException("question not found");
+        }
+    }
 }

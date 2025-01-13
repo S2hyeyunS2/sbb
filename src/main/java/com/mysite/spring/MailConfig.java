@@ -18,7 +18,7 @@ public class MailConfig {
 
     private String host;
     private int port;
-    private String id;
+    private String username;
     private String password;
 
     @Bean
@@ -26,7 +26,7 @@ public class MailConfig {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 
         javaMailSender.setHost(host);
-        javaMailSender.setUsername(id);
+        javaMailSender.setUsername(username);
         javaMailSender.setPassword(password);
         javaMailSender.setPort(port);
 
