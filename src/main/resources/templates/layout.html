@@ -8,6 +8,12 @@
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
     <!-- sbb CSS -->
     <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+
+    <!-- SimpleMDE CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
+    <!-- SimpleMDE JS -->
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <title>Hello, sbb!</title>
 </head>
 <body>
@@ -18,8 +24,30 @@
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
 <!-- Bootstrap JS -->
 <script th:src="@{/bootstrap.min.js}"></script>
+
 <!-- 자바스크립트 Start -->
-<th:block layout:fragment="script"></th:block>
+<th:block layout:fragment="script">
+
+    <!-- SimpleMDE 초기화 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // SimpleMDE를 적용할 텍스트 에어리어의 ID 목록
+            var editorIds = ['markdownEditorQuestion', 'markdownEditorAnswer', 'markdownEditorAnswerNew'];
+
+            // 각 ID에 대해 SimpleMDE 초기화
+            editorIds.forEach(function(id) {
+                var element = document.getElementById(id);
+                if (element) {
+                    new SimpleMDE({
+                        element: element,
+                        spellChecker: false,
+                        sanitize: false // XSS 공격을 방지하려면 서버 측에서 검증 필요
+                    });
+                }
+            });
+        });
+    </script>
+</th:block>
 <!-- 자바스크립트 End -->
 </body>
 </html>

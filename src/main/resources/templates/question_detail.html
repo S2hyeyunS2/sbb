@@ -111,7 +111,7 @@
             <form th:action="@{|/comment/createAnswer/${answer.id}|}" th:object="${commentForm}" method="post" class="my-1 mx-2">
                 <div th:replace="~{form_errors :: formErrorsFragment}"></div>
                 <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="1"></textarea>
-                <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="1"></textarea>
+                <textarea sec:authorize="isAuthenticated()" th:field="*{content}" id="markdownEditorAnswerNew" class="form-control" rows="10"></textarea>
                 <input type="submit" value="댓글등록" class="btn btn-primary my-2">
             </form>
             <!-- 댓글 작성 끝 -->
@@ -149,7 +149,7 @@
     <form th:action="@{|/answer/create/${question.id}|}" th:object="${answerForm}" method="post" class="my-3">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
         <textarea sec:authorize="isAnonymous()" disabled th:field="*{content}" class="form-control" rows="10"></textarea>
-        <textarea sec:authorize="isAuthenticated()" th:field="*{content}" class="form-control" rows="10"></textarea>
+        <textarea sec:authorize="isAuthenticated()" th:field="*{content}" id="markdownEditorAnswerNew" class="form-control" rows="10"></textarea>
         <input type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
 </div>
