@@ -12,5 +12,5 @@ public enum UserRole {
         this.value = value;
     }
 
-    private String value;
+    private final String value;
 }

@@ -23,7 +23,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oauth2User = new DefaultOAuth2UserService().loadUser(userRequest);
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String userNameAttributeName = userRequest.getClientRegistration()
                 .getProviderDetails()
                 .getUserInfoEndpoint()
@@ -32,7 +31,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Map<String, Object> attributes = oauth2User.getAttributes();
 
         // 카카오 사용자 정보 추출
-        String id = attributes.get("id").toString();
+        String id = attributes.get("id") != null ? attributes.get("id").toString() : null;
         Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         String email = kakaoAccount.get("email").toString();
 
