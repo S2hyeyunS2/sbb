@@ -1,5 +1,7 @@
 package com.mysite.spring;
 
+import com.mysite.spring.user.CustomOAuth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +15,16 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@Configuration //스프링의 환경 설정 파일이다
-@EnableWebSecurity //모든 요청 URL이 스프링 시큐리티의 제어를 받도록 만듦
-@EnableMethodSecurity(prePostEnabled=true)
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-    @Bean //스프링에 의해 생성 또는 관리되는 객체
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
@@ -34,6 +40,11 @@ public class SecurityConfig {
                         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true))
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .loginPage("/user/login")
+                        .defaultSuccessUrl("/")
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService))) // 주입된 customOAuth2UserService 사용
         ;
         return http.build();
     }

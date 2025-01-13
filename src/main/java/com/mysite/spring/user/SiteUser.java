@@ -20,4 +20,9 @@ public class SiteUser {
 
     @Column(unique = true)
     private String email;
+
+    private String kakaoId;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 }
